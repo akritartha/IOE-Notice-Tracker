@@ -3,3 +3,4 @@ venv/
 __pycache__/
 notices.db
 .env
+cron.log
