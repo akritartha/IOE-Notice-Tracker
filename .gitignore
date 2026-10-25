@@ -1,0 +1,5 @@
+practice.py
+venv/
+__pycache__/
+notices.db
+.env
