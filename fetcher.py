@@ -1,16 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
 
-url="https://pcampus.edu.np/category/student-activity/"
-response=requests.get(url,timeout=15)
-print(response.status_code)
+URL="https://pcampus.edu.np/category/student-activity/"
 
-soup=BeautifulSoup(response.text,"html.parser")
+def fetch_notices():
+    response=requests.get(URL,timeout=15)
+    response.raise_for_status()
+    soup=BeautifulSoup(response.text,"html.parser")
 
-for article in soup.select("article.post"):
-    link=article.select_one("h2.entry-title a")
-    date=article.select_one("time.entry-date")
-    print(link.get_text(strip=True))
-    print(link["href"])
-    print(date["datetime"])
-    print("---")
+    notices=[]
+
+    for article in soup.select("article.post"):
+        link=article.select_one("h2.entry-title a")
+        date=article.select_one("time.entry-date")
+        notices.append({
+            "title": link.get_text(strip=True),
+            "url": link["href"],
+            "date": date["datetime"]
+        })
+    return notices
+
+if __name__=="__main__":
+    for n in fetch_notices():
+        print(n["title"], n["date"])
